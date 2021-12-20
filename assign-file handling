@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+struct student
+{
+   int roll_no;
+   char name[50];
+   char division;
+   char add[100];
+} s[50];
+void accept(struct student s[50], int n)
+{
+   for (int i = 0; i < n; i++)
+   {
+      printf("Enter %d Student Roll Number, Name, Division & Address \n", (i + 1));
+      scanf("%d %[^\n]%*c %c %[^\n]%*c", &s[i].roll_no, s[i].name, &s[i].division, s[i].add);
+   }
+}
+void ADD_To_File(struct student s[50], int n)
+{
+   FILE *fp;
+   fp = fopen("DATA.txt", "a");
+   if (fp == NULL)
+   {
+      printf("ERROR");
+   }
+   else
+   {
+      for (int i = 0; i < n; i++)
+      {
+         fprintf(fp, "%d %s %c %s\n", s[i].roll_no, s[i].name, s[i].division, s[i].add);
+      }
+   }
+   fclose(fp);
+}
+void Particular_Student_Data()
+{
+  int n;
+   int r_no;
+   printf("Enter the roll number : \n");
+   scanf("%d", &r_no);
+   FILE *fp;
+   fp = fopen("DATA.txt", "r");
+   if (fp == NULL)
+   {
+      printf("ERROR\n");
+   }
+   else
+   {
+      for (int i = 0; i < n; i++)
+      {
+         if (s[i].roll_no == r_no)
+         {
+            fscanf(fp, " %d %s %c %s", &s[i].roll_no, s[i].name, &s[i].division, s[i].add);
+            printf("\n\t\tRoll_No: %d\tName: %s\tDivision: %c\tAddress: %s\n", s[i].roll_no, s[i].name, s[i].division, s[i].add);
+         }
+      }
+   }
+   fclose(fp);
+}
+void Display()
+{
+  int n;
+   FILE *fp;
+   fp = fopen("DATA.txt", "r");
+   if (fp == NULL)
+   {
+      printf("ERROR\n");
+   }
+   else
+   {
+      for (int i = 0; i < n; i++)
+      {
+         fscanf(fp, " %d %s %c %s", &s[i].roll_no, s[i].name, &s[i].division, s[i].add);
+         printf("\n\t\tRoll_No: %d\tName: %s\tDivision: %c\tAddress: %s\n", s[i].roll_no, s[i].name, s[i].division, s[i].add);
+      }
+   }
+}
+void Delete()
+{
+  int n;
+   int r_no;
+   printf("Enter the roll number : \n");
+   scanf("%d", &r_no);
+   FILE *fp, *fp2;
+   fp = fopen("DATA.txt", "r");
+   fp2 = fopen("Temp.txt", "w");
+   if (fp == NULL || fp2 == NULL)
+   {
+      printf("ERROR\n");
+   }
+   else
+   {
+
+      for (int i = 0; i < n; i++)
+      {
+         fscanf(fp,"");
+      }
+   }
+}
+int main()
+{
+   // struct student s[50];
+   int n;
+   printf("Enter the number of students : \n");
+   scanf("%d", &n);
+   accept(s, n);
+
+   int operator;
+   // ADD_To_File(s, n);
+   // Display(n);
+   //  printf("Enter the roll number : \n");
+   //  scanf("%d", R_No);
+   //  Particular_Student_Data(R_No, n);
+   do
+   {
+      printf("\nEnter operator\n1.ADD_TO_File\n2.Specific_Student_Data\n3.Display_All\n4.Delete\n5.Exit");
+      printf("\nEnter your choice:");
+      scanf(" %d", &operator);
+      switch (operator)
+      {
+      case 1:
+         ADD_To_File(s, n);
+         printf("Data added to file\n");
+         break;
+      case 2:
+         Particular_Student_Data();
+         printf("Particular Data printed\n");
+         break;
+      case 3:
+         printf("Disply all information\n");
+         Display();
+         break;
+      case 4:
+         printf("Delete function calling \n");
+         Delete();
+      case 5:
+          printf("exit");
+          return 0;   
+      default:
+         break;
+      }
+   } while (operator!= 0);
+   
+}
