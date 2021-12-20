@@ -1,0 +1,163 @@
+#include<stdio.h>
+
+struct book
+{
+	int id;
+	char name[20];
+	char author[20];
+	float price; 
+};
+typedef struct book book;
+
+
+void accept( book b[20],int n)
+{
+	int i;
+	for(int i=0;i<n;i++)
+	{
+		printf("enter book id ,name ,author,price ");
+		scanf("%d%s%s%f",&b[i].id,b[i].name,b[i].author,&b[i].price);
+	}
+}
+
+void write_to_file( book b[20],int n)
+{
+	int i;
+	FILE *fp;
+	fp=fopen("Bookdata.txt","a");
+	
+	if(fp==0)
+	{
+		printf("Error");
+		return;
+	}
+	else
+	{
+		//fputs("book_id\tbook_name\t\tbook_author\\ttbook_price",fp);
+		for(i=0;i<n;i++)
+		{
+			fputs("\n",fp);
+			fprintf(fp,"%d\t\t\t%s\t\t\t%s\t\t\t%f",b[i].id,b[i].name,b[i].author,b[i].price);
+		}
+	}
+	fclose(fp);
+}
+
+void display ( book  b[20])
+{
+	FILE *fp; char ch;
+	fp=fopen("Bookdata.txt","r");
+    printf("display :\n");
+    	if(fp==0)
+	{
+		printf("error");
+		return;
+	}
+   while ((ch=getc(fp))!=EOF){
+      if(ch == ',')
+         printf("\t\t");
+      else
+         printf("%c",ch);
+   }
+   fclose(fp);
+}
+void display_particular_data()
+{
+	book b;
+	FILE *fp;
+	int ID;
+	fp=fopen("Bookdata.txt","r");
+	printf("Enter book id of book which u want to search :");
+	scanf("%d",&ID);
+	while(fscanf(fp,"%d%s%s%f",&b.id,b.name,b.author,&b.price)!=EOF)
+	{
+		if(b.id==ID)
+		{
+		  printf("Record found :)\n");
+	  	  printf("%d\t\t%s\t\t%s\t\t%f\n",b.id,b.name,b.author,b.price);
+	  	  return;
+	    }
+		
+	}
+	fclose(fp);
+	printf("NO record found  \n"); 
+}
+
+void Delete()
+{
+	book b;
+	FILE *fp,*fp2;
+	int id,found=0;
+	fp=fopen("Bookdata.txt","r");
+	fp2=fopen("books_data_temp.txt","w");
+	printf("Enter book id which u want to delete :");
+	scanf("%d",&id);
+		if(fp==0 || fp2==0)
+	{
+		printf("Error");
+		return;
+	}
+	while(fscanf(fp,"%d%s%s%f",&b.id,b.name,b.author,&b.price)!=EOF)
+	{
+		if(b.id==id)
+		{
+		  found=1;
+      }
+	  else
+	    fprintf(fp2,"\n%d\t\t\t%s\t\t\t%s\t\t\t%f",b.id,b.name,b.author,b.price);
+	
+	}
+	
+	fclose(fp);
+	fclose(fp2);
+	
+	if(found)
+	{
+	  fp2=fopen("books_data_temp.txt","r");
+	  fp=fopen("books_data.txt","w");
+	  
+	
+	    while(fscanf(fp2,"%d%s%s%f",&b.id,b.name,b.author,&b.price)!=EOF)
+		{
+			fputs("\n",fp);
+			fprintf(fp,"%d\t\t\t%s\t\t\t%s\t\t\t%f",b.id,b.name,b.author,b.price);
+		}
+	  fclose(fp);
+	  fclose(fp2);	
+	
+	}
+	else 
+	printf("NO record found :( \n");
+}
+
+int main()
+{
+	book books[20];
+	int n;
+	int operator;
+	do{
+		printf("\n1.CREATE\n2.DISPLAY\n3.DISPLAY_PARTICULAR_DATA\n4.DELETE\n5.EXIT\nenter your choice : ");
+		scanf("%d",&operator);
+		switch(operator)
+		{
+			case 1:	
+			        printf("enter no of books:");
+			        scanf("%d",&n);
+			        accept(books,n);
+	                write_to_file( books, n);
+				    break;
+			case 2:	display(books);
+			        break;
+			case 3:display_particular_data();
+			       break;
+			case 4:Delete();
+			         break;
+		    case 5: printf("\nEXIT ");
+		           return 0;
+		    default :
+		    	printf("\n This is a wrong choice !");
+		    	continue;
+		}
+	}while(operator!=5);
+
+}
